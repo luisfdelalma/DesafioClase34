@@ -1,0 +1,34 @@
+<h2>Producto</h2>
+<p>A continuación se muestra el producto buscado</p>
+
+<div>
+
+    <div style=" border: 2px solid #000000; padding:5px;width:500px; height: 150px;">
+        <b>Nombre:</b> {{product.title}}<br>
+        <b>Código interno:</b> {{product.BId}}<br>
+        <b>Precio:</b> ${{product.price}}<br>
+        <b>Categoría:</b> {{product.category}}<br>
+        <b>Descripción:</b> {{product.description}}
+
+        <div>
+            <form method="post" action="/api/carts/toCart/{{{product._id}}}">
+                <button id={{{product._id}}} class="addToCart" value={{{product._id}}}>Agregar a carrito</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    let buttons = document.getElementsByClassName("addToCart")
+    for (var i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener('click', (e) => {
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Producto agregado con éxito",
+                showConfirmButton: false,
+                timer: 1500
+            })
+        });
+    }
+</script>

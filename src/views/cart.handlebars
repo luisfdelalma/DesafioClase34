@@ -1,0 +1,83 @@
+<a href="/api/products/search"><button>Volver a ver productos</button></a>
+
+<div style="width:1000px; height: 100px; margin-left:auto; margin-right:auto;">
+    <h1 style="text-align:center;">Carrito de compras</h1>
+    <h3 style="text-align: center;">A continuación se muestran los productos que se han agregado a tu carrito de compras
+    </h3>
+    <p style="text-align: center;">Si deseas modificar la cantidad de productos a comprar ingresa la nueva cantidad, de
+        lo contrario
+        <b>no</b> modifiques la cantidad.
+    </p>
+</div>
+
+
+<div style="width:1000px; height: 30px; margin-left:auto; margin-right:auto; margin-top: 50px;">
+    <div style="display: grid; grid-template-columns: 200px 70px 120px; width: 400px; margin: auto">
+        <div><b>Producto</b></div>
+        <div style="margin:auto;"><b>Cantidad</b></div>
+        <div style="margin:auto;"><b>Nueva cantidad</b></div>
+    </div>
+</div>
+
+<div style="width:1000px; height: auto; margin-left:auto; margin-right:auto; margin: auto;">
+    <form action="/api/carts/{{CId}}/purchase" method="post" id="cart">
+        {{#each products}}
+        <div style="display: grid; grid-template-columns: 200px 70px 120px; width: 400px; margin: auto">
+            <div>
+                {{product.title}}
+            </div>
+            <div style="margin:auto;">{{quantity}}
+            </div>
+            <div style="margin:auto;">
+                <input style="width: 50px;" type="number" class="price" name="{{product.BId}}[][quantity]"
+                    id="{{product.title}}" value="{{quantity}}" min="0" data-price="{{product.price}}">
+                <input type="hidden" name="{{product.BId}}[][id]" value="{{product._id}}">
+            </div>
+        </div>
+        {{/each}}
+    </form>
+</div>
+
+
+
+<div style="width:1000px; height: 30px; margin-left:auto; margin-right:auto; margin-top: 20px">
+    <div style="display: grid; grid-template-columns: 200px 70px 120px; width: 400px; margin: auto">
+        <div><b>Total</b></div>
+        <div style="margin:auto;"><b>${{total}}</b></div>
+        <div style="margin:auto;" id="newTotal"></div>
+    </div>
+</div>
+
+<div style="width:1000px; height: 30px; margin-left:auto; margin-right:auto; margin-top: 5px">
+    <div style="display: grid; grid-template-columns: 200px 70px 120px; width: 400px; margin: auto">
+        <div></div>
+        <div style="margin:auto;"></div>
+        <div style="margin:auto;"><button id="newTotal-button" onclick="total()">Calcular</button>
+        </div>
+    </div>
+</div>
+
+<div style="width:1000px; height: 30px; margin-left:auto; margin-right:auto; margin-top: 5px">
+    <div style="display: grid; width: 400px; margin: auto">
+        <div style="margin:auto;"><button style="width: 200px;" type="submit" form="cart">Pagar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function total() {
+        let list = document.getElementsByClassName("price")
+        let productList = []
+        let total = 0
+
+        for (const prod of list) {
+            let prodVector = { product: prod.id.toString(), quantity: parseInt(prod.value), price: parseInt(prod.dataset.price) }
+            productList.push(prodVector)
+
+            total = total + (parseInt(prod.value) * parseInt(prod.dataset.price))
+        }
+
+        let totalHTML = document.getElementById("newTotal")
+        totalHTML.innerHTML = `$${total}`
+    }
+</script>
